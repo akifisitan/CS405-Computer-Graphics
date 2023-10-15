@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./style.css" rel="stylesheet" />
+    <script src="./script.js" defer></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main" class="box">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="500"
+        width="900"
+        class="hidden"
+      >
+        <g id="group" fill="red" stroke="black">
+          <circle cx="40" cy="40" r="40" fill="red" />
+          <circle cx="120" cy="40" r="40" fill="red" />
+          <!-- Draw X and Y axis -->
+          <line x1="50" y1="0" x2="50" y2="300" stroke-width="4" />
+          <line x1="50" y1="300" x2="800" y2="300" stroke-width="4" />
+          <!-- Y axis values -->
+          <text
+            x="20"
+            y="100"
+            font-family="arial"
+            text-anchor="middle"
+            font-size="12"
+          >
+            100000
+          </text>
+          <text
+            x="20"
+            y="200"
+            font-family="arial"
+            text-anchor="middle"
+            font-size="12"
+          >
+            1000
+          </text>
+          <!-- X axis values -->
+          <text x="90" y="325" font-family="arial" font-size="12">2020</text>
+          <rect x="80" y="100" width="20" height="200" fill="blue" />
+          <rect x="100" y="70" width="20" height="230" fill="red" />
+        </g>
+      </svg>
+    </div>
+  </body>
+</html>
