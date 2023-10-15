@@ -1,4 +1,10 @@
 const main = document.getElementById("main");
+const svg = createSVGElement("svg", { height: 500, width: 850 });
+const group = createSVGElement("g", {
+  id: "group",
+  fill: "white",
+  stroke: "black",
+});
 
 function createSVGElement(elementType, props, value) {
   const element = document.createElementNS(
@@ -14,70 +20,58 @@ function createSVGElement(elementType, props, value) {
   return element;
 }
 
-const data = [
-  [2016, 2017, 2018, 2019, 2020, 2021, 2022],
-  [12910, 12134, 11718, 11022, 9757, 10089, 9522],
-  [6994, 6598, 6360, 6065, 5388, 5498, 5289],
-  [5916, 5536, 5358, 4957, 4369, 4591, 4233],
-];
-
-const svgWidth = 900;
-const svgHeight = 500;
-const xAxisData = {
-  labelStartX: 70,
-  startX: 50,
-  startY: 400,
-  endX: 800,
-  endY: 400,
-};
-const yAxisData = {
-  labelStartX: 20,
-  startX: 50,
-  startY: 50,
-  endX: 50,
-  endY: 400,
-};
-
-const svg = createSVGElement("svg", { height: svgHeight, width: svgWidth });
-const group = createSVGElement("g", {
-  id: "group",
-  fill: "white",
-  stroke: "black",
-});
-
-const yAxis = createSVGElement("line", {
-  x1: yAxisData.startX,
-  y1: yAxisData.startY,
-  x2: yAxisData.endX,
-  y2: yAxisData.endY,
-  "stroke-width": 4,
-});
-
-const xAxis = createSVGElement("line", {
-  x1: xAxisData.startX,
-  y1: xAxisData.startY,
-  x2: xAxisData.endX,
-  y2: xAxisData.endY,
-  "stroke-width": 4,
-});
-
 function calculateBarTopYCoordinate(x) {
   return -0.03 * x + 400;
 }
 
-function addYAxisData(data) {
-  // const elements = [...data[2], ...data[3]];
-  // const max = Math.max(...elements);
-  // const numDigits = Math.floor(Math.log10(max) + 1);
-  // const ceil = Math.pow(10, numDigits);
-  // const step = ceil / 10;
+const data = [
+  [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
+  [17607, 15164, 14567, 14974, 14027, 14951, 13677, 12190],
+  [9541, 8242, 7843, 8022, 7601, 8212, 7440, 6994],
+  [8066, 6922, 6724, 6952, 6426, 6739, 6237, 5916],
+];
+
+const xAxis = {
+  labelStartX: 70,
+  x1: 50,
+  x2: 850,
+  y: 400,
+};
+const yAxis = {
+  labelStartX: 20,
+  x: 50,
+  y1: 50,
+  y2: 400,
+};
+
+const xAxisElement = createSVGElement("line", {
+  x1: xAxis.x1,
+  x2: xAxis.x2,
+  y1: xAxis.y,
+  y2: xAxis.y,
+  "stroke-width": 4,
+});
+
+group.appendChild(xAxisElement);
+
+const yAxisElement = createSVGElement("line", {
+  x1: yAxis.x,
+  x2: yAxis.x,
+  y1: yAxis.y1,
+  y2: yAxis.y2,
+  "stroke-width": 4,
+});
+
+group.appendChild(yAxisElement);
+
+function addYAxisData() {
   for (let i = 0; i <= 10; i += 1) {
-    const yValue = yAxisData.endY - 30 * i;
+    const yValue = yAxis.y2 - 30 * i;
     const value = 1000 * i;
     const el = createSVGElement(
       "text",
       {
-        x: yAxisData.labelStartX,
+        x: yAxis.labelStartX,
         y: yValue,
         "font-family": "Arial",
         "font-size": 12,
@@ -89,12 +83,14 @@ function addYAxisData(data) {
   }
 }
 
+addYAxisData();
+
 function createMaleBar({ startX, data }) {
   const barTopYCoordinate = calculateBarTopYCoordinate(data);
   const maleBar = createSVGElement("rect", {
     x: startX,
     y: barTopYCoordinate,
-    height: xAxisData.startY - barTopYCoordinate,
+    height: xAxis.y - barTopYCoordinate,
     width: 20,
     fill: "red",
   });
@@ -121,7 +117,7 @@ function createFemaleBar({ startX, data }) {
   const femaleBar = createSVGElement("rect", {
     x: startX + 20,
     y: barTopYCoordinate,
-    height: xAxisData.startY - barTopYCoordinate,
+    height: xAxis.y - barTopYCoordinate,
     width: 20,
     fill: "blue",
   });
@@ -143,10 +139,6 @@ function createFemaleBar({ startX, data }) {
   return { femaleBar, femaleLabel };
 }
 
-addYAxisData(data);
-group.appendChild(xAxis);
-group.appendChild(yAxis);
-
 for (let i = 0; i < data[0].length; i++) {
   const startX = 80 + i * 100;
   const year = data[0][i];
@@ -156,7 +148,7 @@ for (let i = 0; i < data[0].length; i++) {
     "text",
     {
       x: startX + 20,
-      y: xAxisData.endY + 20,
+      y: xAxis.y + 20,
       "font-family": "arial",
       "font-size": "12",
       "text-anchor": "middle",
@@ -173,6 +165,70 @@ for (let i = 0; i < data[0].length; i++) {
   group.appendChild(femaleBar);
   group.appendChild(femaleLabel);
 }
+
+function createLegendLabels() {
+  const testLabel = createSVGElement(
+    "text",
+    {
+      x: yAxis.labelStartX + 30,
+      y: yAxis.y1 - 10,
+      "font-family": "Arial",
+      "font-size": "16",
+      "text-anchor": "middle",
+      fill: "black",
+      stroke: "black",
+    },
+    "Death Count"
+  );
+  const startX = 350;
+  const maleSquare = createSVGElement("rect", {
+    x: startX,
+    y: xAxis.y + 50,
+    height: 10,
+    width: 10,
+    fill: "red",
+  });
+  const maleLabel = createSVGElement(
+    "text",
+    {
+      x: startX + 30,
+      y: xAxis.y + 60,
+      "font-family": "Arial",
+      "font-size": "16",
+      "text-anchor": "middle",
+      fill: "black",
+      stroke: "black",
+    },
+    "Male"
+  );
+  const femaleSquare = createSVGElement("rect", {
+    x: startX + 60,
+    y: xAxis.y + 50,
+    height: 10,
+    width: 10,
+    fill: "blue",
+  });
+  const femaleLabel = createSVGElement(
+    "text",
+    {
+      x: startX + 100,
+      y: xAxis.y + 60,
+      "font-family": "Arial",
+      "font-size": "16",
+      "text-anchor": "middle",
+      fill: "black",
+      stroke: "black",
+    },
+    "Female"
+  );
+  group.appendChild(testLabel);
+  group.appendChild(maleSquare);
+  group.appendChild(maleLabel);
+  group.appendChild(femaleSquare);
+  group.appendChild(femaleLabel);
+}
+
+createLegendLabels();
 
 svg.appendChild(group);
 main.appendChild(svg);

@@ -3,7 +3,8 @@
 1. Select dataset
 
 The selected data set was the following:
-![Alt text](chosen.png)
+
+![Alt text](<Male-Female Deaths 2009-2016.png>)
 
 2. Convert it into javascript object format
    const data = [
